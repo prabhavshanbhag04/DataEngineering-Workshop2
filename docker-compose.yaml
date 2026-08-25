@@ -1,14 +1,26 @@
-version: "3"
 services:
+
   python_service:
     build:
       context: ./
       dockerfile: Dockerfile
     image: workshop1
-    container_name: workshop_python_container
+    container_name: unicourt_scraper_container
     stdin_open: true
     tty: true
     ports:
-      - "8000:8000"
+      - "8001:8000"
     volumes:
       - .:/app
+    depends_on:
+      - psql-db
+
+  psql-db:
+    image: postgres:14
+    container_name: psql-db
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 123456
+      POSTGRES_DB: scraping_db
+    ports:
+      - "5434:5432"
